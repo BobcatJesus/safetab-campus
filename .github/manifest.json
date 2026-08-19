@@ -1,0 +1,20 @@
+{
+  "name": "SafeTab",          // Full app name (shows on install prompts)
+  "short_name": "Safetab",           // Short name (shows under the app icon)
+  "start_url": "/",                  // Correct — your app loads from the root
+  "display": "standalone",           // Correct — removes browser UI
+  "background_color": "#ffffff",     // Correct — used for splash screens
+  "theme_color": "#000000",          // Correct — used for status bar color
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",  // Correct path if icons are in /public/icons
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",  // Correct path for large icon
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

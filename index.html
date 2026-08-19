@@ -10,3 +10,8 @@
   <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
+
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js");
+}

@@ -2,7 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import QRCode from 'qrcode'
 
-const url = 'https://safetabbobcat.app/'
+const url = process.env.SAFETAB_URL || 'https://safetabbobcat.app/'
 const outputDirectory = new URL('../public/', import.meta.url)
 const outputFile = new URL('safetab-qr.svg', outputDirectory)
 

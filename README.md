@@ -9,6 +9,16 @@ The printable QR code is generated at `public/safetab-qr.svg` and opens
 npm run generate:qr
 ```
 
+For a local presentation on the same Wi-Fi network, generate a QR for the
+computer's LAN address in PowerShell:
+
+```powershell
+$env:SAFETAB_URL='http://192.168.1.238:5173/'; npm run generate:qr
+```
+
+Replace the IP address if the computer receives a different address. The
+phone and computer must be on the same Wi-Fi network.
+
 ## Step 1: Set up Firebase (~10 min) — do this first
 
 This build syncs signals through Firebase Realtime Database, so a

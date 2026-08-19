@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { MapPin, Bell, Check, X, ChevronDown, Radio } from "lucide-react";
+import { MapPin, Bell, Check, X, ChevronDown, Radio, PhoneCall } from "lucide-react";
 import { ref, onValue, set } from "firebase/database";
 import { db } from "./firebase";
 
@@ -13,6 +13,13 @@ const VENUE_TYPES = {
   bar: {
     label: "Bar / Nightlife",
     staffTerm: "staff",
+    staffView: {
+      tabLabel: "Staff",
+      title: "Staff response",
+      emptyLabel: "No active signals",
+      claimLabel: "Claim",
+      resolveLabel: "Resolved",
+    },
     locationGroups: [
       { label: "Bar", options: ["Main Bar", "Service Bar", "Bar Seating"] },
       {
@@ -55,8 +62,77 @@ const VENUE_TYPES = {
   },
 
   campus: {
-    label: "College Campus",
+    label: "University of Houston",
     staffTerm: "campus safety",
+    staffRoles: [
+      "👨‍🎓 Student",
+      "🏠 Resident Assistant (RA)",
+      "🎓 Teaching Assistant (TA)",
+      "👮 Campus Security",
+      "💼 Student Employee",
+      "👩‍🏫 Faculty & Staff",
+      "👨‍👩‍👧 Family Member",
+      "🗂️ Administrator",
+    ],
+    staffAreas: [
+      "All campus",
+      "Library",
+      "Academic Buildings",
+      "Residence",
+      "Outdoors",
+      "Facilities",
+    ],
+    adminResponsibilities: [
+      {
+        label: "Office administration",
+        items: ["Daily operations", "Supplies and equipment", "Maintenance and vendors", "Office policies"],
+      },
+      {
+        label: "Calendar and meetings",
+        items: ["Schedules and events", "Agendas and materials", "Minutes and action items"],
+      },
+      {
+        label: "Communication",
+        items: ["Internal and external contact", "Calls, email, and correspondence", "Documents and communication records"],
+      },
+      {
+        label: "Documents and records",
+        items: ["File organization", "Document control", "Confidential information", "Retention compliance"],
+      },
+      {
+        label: "Reporting and data",
+        items: ["Reports and spreadsheets", "Administrative analysis", "Databases and records", "Data accuracy"],
+      },
+      {
+        label: "Finance and procurement",
+        items: ["Purchase requests", "Invoices and expenses", "Vendor payments", "Budgets and spending"],
+      },
+      {
+        label: "Employee and visitor support",
+        items: ["Onboarding", "Travel arrangements", "Staff resources", "Customer service"],
+      },
+      {
+        label: "Compliance and improvement",
+        items: ["Policy compliance", "Workflow improvements", "Audits and reviews", "Administrative best practices"],
+      },
+    ],
+    adminCompetencies: [
+      "Organization and time management",
+      "Communication",
+      "Attention to detail",
+      "Problem-solving",
+      "Confidentiality",
+      "Microsoft Office proficiency",
+      "Prioritization",
+      "Customer service",
+    ],
+    staffView: {
+      tabLabel: "Campus Safety",
+      title: "Campus safety dispatch",
+      emptyLabel: "No active campus requests",
+      claimLabel: "Respond",
+      resolveLabel: "Close request",
+    },
     locationGroups: [
       {
         label: "Library",
@@ -80,18 +156,97 @@ const VENUE_TYPES = {
       },
     ],
     numberedOptions: ["Study Room", "Classroom", "Lecture Hall", "Dorm Room"],
+    reasonGroups: [
+      {
+        label: "Safety & Security",
+        options: [
+          "Being followed",
+          "Unwanted touching",
+          "Someone has a weapon",
+          "Intimidation or threats",
+          "Harassment concerns",
+          "Restroom feels unsafe",
+          "Need a safe space",
+          "Someone has walked away with something of yours (theft)",
+          "Locked out of a residence hall or room",
+        ],
+      },
+      {
+        label: "Health & Medical",
+        options: [
+          "Feeling unwell",
+          "Medical concern",
+          "Intoxication",
+          "Suspected overdose",
+          "Unresponsive student",
+        ],
+      },
+      {
+        label: "Behavioral & Conduct Issues",
+        options: [
+          "Someone is rude",
+          "Classroom disruptions",
+          "Noise complaints",
+          "Roommate conflicts",
+          "Someone is damaging or breaking property",
+        ],
+      },
+      {
+        label: "Facilities & Maintenance",
+        options: [
+          "There's a mess",
+          "Residence hall maintenance concerns",
+          "Unsafe or unsanitary conditions",
+        ],
+      },
+      {
+        label: "Support & Assistance",
+        options: [
+          "Ask for a manager",
+          "Request staff assistance",
+          "Report a concern or incident",
+        ],
+      },
+    ],
     reasons: [
-      "Feel unsafe / being followed",
-      "Need a walking escort",
+      "Being followed",
+      "Unwanted touching",
+      "Someone has a weapon",
+      "Intimidation or threats",
+      "Harassment concerns",
+      "Restroom feels unsafe",
+      "Need a safe space",
+      "Someone has walked away with something of yours (theft)",
+      "Locked out of a residence hall or room",
+      "Feeling unwell",
       "Medical concern",
-      "Unwanted contact",
-      "Just want a check-in",
+      "Intoxication",
+      "Suspected overdose",
+      "Unresponsive student",
+      "Someone is rude",
+      "Classroom disruptions",
+      "Noise complaints",
+      "Roommate conflicts",
+      "Someone is damaging or breaking property",
+      "There's a mess",
+      "Residence hall maintenance concerns",
+      "Unsafe or unsanitary conditions",
+      "Ask for a manager",
+      "Request staff assistance",
+      "Report a concern or incident",
     ],
   },
 
   cafe: {
     label: "Coffee Shop / Café",
     staffTerm: "staff",
+    staffView: {
+      tabLabel: "Staff",
+      title: "Staff response",
+      emptyLabel: "No active signals",
+      claimLabel: "Claim",
+      resolveLabel: "Resolved",
+    },
     locationGroups: [
       {
         label: "Seating",
@@ -111,11 +266,162 @@ const VENUE_TYPES = {
       },
     ],
     numberedOptions: ["Table"],
+    reasonGroups: [
+      {
+        label: "Personal Safety",
+        options: [
+          "Feeling threatened by someone",
+          "Being followed",
+          "Harassment",
+          "Verbal abuse",
+          "Intimidation",
+          "Stalking behavior",
+          "Unwanted attention",
+          "Suspicious person nearby",
+          "Aggressive customer",
+          "Aggressive employee",
+          "Physical altercation occurring",
+          "Fear of violence",
+        ],
+      },
+      {
+        label: "Medical & Health Emergencies",
+        options: [
+          "Person unconscious",
+          "Person having a seizure",
+          "Breathing difficulty",
+          "Chest pain",
+          "Severe bleeding",
+          "Serious injury",
+          "Allergic reaction",
+          "Fainting",
+          "Medical emergency requiring ambulance",
+          "Mental health crisis",
+          "Panic attack",
+        ],
+      },
+      {
+        label: "Environmental Hazards",
+        options: [
+          "Wet floor",
+          "Spill creating slip hazard",
+          "Broken flooring",
+          "Obstructed walkway",
+          "Poor lighting",
+          "Falling object risk",
+          "Broken furniture",
+          "Sharp object exposed",
+          "Excessive heat",
+          "Excessive cold",
+          "Unsafe outdoor conditions",
+        ],
+      },
+      {
+        label: "Fire & Electrical Hazards",
+        options: [
+          "Smoke detected",
+          "Fire detected",
+          "Burning smell",
+          "Exposed wiring",
+          "Damaged electrical equipment",
+          "Sparking outlet",
+          "Overloaded extension cords",
+          "Emergency exit blocked",
+          "Fire extinguisher inaccessible",
+        ],
+      },
+      {
+        label: "Food & Drink Safety",
+        options: [
+          "Suspected food poisoning",
+          "Allergen concern",
+          "Incorrect allergen labeling",
+          "Food contamination",
+          "Foreign object in food",
+          "Food stored improperly",
+          "Expired food served",
+          "Unsafe food handling observed",
+        ],
+      },
+      {
+        label: "Security Incidents",
+        options: [
+          "Theft occurring",
+          "Theft suspected",
+          "Robbery",
+          "Vandalism",
+          "Property damage",
+          "Unauthorized access",
+          "Suspicious package",
+          "Lost child",
+          "Missing person",
+          "Security breach",
+        ],
+      },
+      {
+        label: "Vulnerable Person Concerns",
+        options: [
+          "Child appears unsafe",
+          "Child left unattended",
+          "Elderly person needing assistance",
+          "Distressed individual",
+          "Person appearing vulnerable",
+          "Person under influence needing help",
+          "Welfare concern",
+          "Safeguarding concern",
+        ],
+      },
+      {
+        label: "Staff Safety",
+        options: [
+          "Working alone feels unsafe",
+          "Threat from customer",
+          "Workplace violence",
+          "Unsafe lifting activity",
+          "Fatigue concern",
+          "Lack of safety equipment",
+          "Unsafe work practice observed",
+          "Injury at work",
+        ],
+      },
+      {
+        label: "Transportation & External Area Risks",
+        options: [
+          "Dangerous driving nearby",
+          "Vehicle collision",
+          "Pedestrian hazard",
+          "Unsafe parking area",
+          "Poor visibility outside",
+          "Ice or weather hazard",
+          "Unsafe public transport situation",
+        ],
+      },
+      {
+        label: "General Risk Categories",
+        options: [
+          "Immediate danger",
+          "High risk",
+          "Moderate risk",
+          "Low risk",
+          "Near miss",
+          "Hazard observed",
+          "Incident occurred",
+          "Request for assistance",
+          "Welfare check needed",
+        ],
+      },
+    ],
     reasons: [
-      "Uncomfortable situation",
-      "Unwanted contact",
-      "Need a manager",
-      "Just want a check-in",
+      "Feeling threatened by someone",
+      "Person unconscious",
+      "Wet floor",
+      "Smoke detected",
+      "Suspected food poisoning",
+      "Theft occurring",
+      "Child appears unsafe",
+      "Working alone feels unsafe",
+      "Dangerous driving nearby",
+      "Immediate danger",
     ],
   },
 };
@@ -346,20 +652,31 @@ function PatronView({ onSend, venueConfig }) {
           Step 2
         </p>
         <p className="text-neutral-200 text-sm mb-2">What's going on?</p>
-        <div className="grid grid-cols-1 gap-2">
-          {venueConfig.reasons.map((r) => (
-            <button
-              key={r}
-              onClick={() => setReason(r)}
-              className={`text-left px-4 py-2.5 rounded-xl border text-sm ${
-                reason === r
-                  ? "border-amber-400 bg-amber-400/10 text-amber-200"
-                  : "border-neutral-800 bg-neutral-900 text-neutral-300"
-              }`}
-            >
-              {r}
-            </button>
-          ))}
+        <div className="max-h-[360px] overflow-y-auto pr-1 grid grid-cols-1 gap-4">
+          {(venueConfig.reasonGroups || [{ label: null, options: venueConfig.reasons }]).map(
+            (group) => (
+              <div key={group.label || "reasons"} className="grid grid-cols-1 gap-2">
+                {group.label && (
+                  <p className="text-[11px] uppercase tracking-wide text-neutral-500">
+                    {group.label}
+                  </p>
+                )}
+                {group.options.map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => setReason(r)}
+                    className={`text-left px-4 py-2.5 rounded-xl border text-sm ${
+                      reason === r
+                        ? "border-amber-400 bg-amber-400/10 text-amber-200"
+                        : "border-neutral-800 bg-neutral-900 text-neutral-300"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            )
+          )}
         </div>
       </div>
 
@@ -398,14 +715,22 @@ function PatronView({ onSend, venueConfig }) {
 // swap MOCK_STAFF for a real roster lookup later)
 // ---------------------------------------------
 const MOCK_STAFF = [
-  { name: "Jordan", pin: "1234", role: "Bartender" },
-  { name: "Priya", pin: "5678", role: "Floor Manager" },
-  { name: "Marcus", pin: "0000", role: "Security" },
+  { name: "Jordan", pin: "1234", role: "Campus Safety", area: "Library" },
+  {
+    name: "Priya",
+    pin: "5678",
+    role: "Resident Assistant (RA)",
+    area: "Residence",
+  },
+  { name: "Marcus", pin: "0000", role: "Campus Security", area: "Outdoors" },
+  { name: "Alex", pin: "2468", role: "Administrator", area: "All campus" },
 ];
 
-function StaffLogin({ onAuth }) {
+function StaffLogin({ onAuth, venueConfig }) {
   const [name, setName] = useState("");
   const [pin, setPin] = useState("");
+  const [role, setRole] = useState(venueConfig.staffRoles?.[0] || "");
+  const [area, setArea] = useState(venueConfig.staffAreas?.[0] || "");
   const [error, setError] = useState("");
 
   const submit = () => {
@@ -420,7 +745,7 @@ function StaffLogin({ onAuth }) {
       } catch {
         // ignore; StaffView will surface a warning if chimes fail later
       }
-      onAuth(match);
+      onAuth({ ...match, role: role || match.role, area: area || match.area });
     } else {
       setError("Name or PIN not recognized");
       setPin("");
@@ -444,6 +769,47 @@ function StaffLogin({ onAuth }) {
         placeholder="Name"
         className="rounded-xl bg-neutral-900 border border-neutral-700 px-4 py-3 text-sm text-neutral-100"
       />
+      {venueConfig.staffRoles && (
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          aria-label="Staff role"
+          className="rounded-xl bg-neutral-900 border border-neutral-700 px-4 py-3 text-sm text-neutral-100"
+        >
+          {venueConfig.staffRoles.map((staffRole) => (
+            <option key={staffRole} value={staffRole}>
+              {staffRole}
+            </option>
+          ))}
+        </select>
+      )}
+      {venueConfig.staffAreas && (
+        <select
+          value={area}
+          onChange={(e) => setArea(e.target.value)}
+          aria-label="Assigned area"
+          className="rounded-xl bg-neutral-900 border border-neutral-700 px-4 py-3 text-sm text-neutral-100"
+        >
+          {venueConfig.staffAreas.map((staffArea) => (
+            <option key={staffArea} value={staffArea}>
+              Assigned area: {staffArea}
+            </option>
+          ))}
+        </select>
+      )}
+      {role === "🗂️ Administrator" && venueConfig.adminResponsibilities && (
+        <div className="max-h-32 overflow-y-auto rounded-xl border border-neutral-800 bg-neutral-950 px-3 py-2 text-[11px] text-neutral-400">
+          <p className="mb-2 text-neutral-200">Administrator scope</p>
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
+            {venueConfig.adminResponsibilities.map((responsibility) => (
+              <p key={responsibility.label}>{responsibility.label}</p>
+            ))}
+          </div>
+          <p className="mt-2 border-t border-neutral-800 pt-2 text-neutral-500">
+            Competencies: {venueConfig.adminCompetencies.join(", ")}
+          </p>
+        </div>
+      )}
       <input
         value={pin}
         onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
@@ -467,7 +833,7 @@ function StaffLogin({ onAuth }) {
         Sign in
       </button>
       <p className="text-neutral-700 text-[11px] text-center">
-        Demo roster — Jordan / 1234, Priya / 5678, Marcus / 0000
+        Demo roster — Jordan / 1234, Priya / 5678, Marcus / 0000, Alex / 2468
       </p>
     </div>
   );
@@ -537,6 +903,8 @@ function StaffView({
   staffMember,
   onSignOut,
   soundReady,
+  venueConfig,
+  onAreaChange,
 }) {
   const alertedIds = useRef(new Set());
   const lastEscalation = useRef({});
@@ -575,16 +943,51 @@ function StaffView({
   }, [signals]);
 
   const unclaimedCount = signals.filter((s) => !s.ack && !s.claimedBy).length;
+  const areaMatches = (signal) => {
+    if (!staffMember.area || staffMember.area === "All campus") return true;
+    const areaLocationMap = {
+      Library: ["Study Room", "Main Floor", "Stacks", "Quiet Zone"],
+      "Academic Buildings": ["Lecture Hall", "Classroom", "Hallway", "Lab"],
+      Residence: ["Dorm Room", "Dorm Hallway", "Common Room", "Laundry Room"],
+      Outdoors: ["Quad", "Parking Lot", "Parking Garage", "Bus Stop", "Path / Walkway"],
+      Facilities: ["Restroom", "Gym / Rec Center", "Dining Hall"],
+    };
+    return areaLocationMap[staffMember.area]?.some((location) =>
+      signal.location.startsWith(location)
+    );
+  };
+  const orderedSignals = [...signals].sort(
+    (first, second) => Number(areaMatches(second)) - Number(areaMatches(first))
+  );
 
   return (
     <div className="flex flex-col h-full">
       <div className="px-5 pt-6 pb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Radio size={16} className="text-amber-400" />
-          <p className="text-neutral-200 text-sm font-medium">
-            {unclaimedCount} unclaimed ·{" "}
-            {signals.filter((s) => !s.ack).length} active
-          </p>
+          <div>
+            <p className="text-neutral-200 text-sm font-medium">
+              {venueConfig.staffView.title}
+            </p>
+            <p className="text-neutral-500 text-xs mt-0.5">
+              {staffMember.role && `${staffMember.role} · `}
+              {unclaimedCount} awaiting response · {signals.filter((s) => !s.ack).length} active
+            </p>
+            {venueConfig.staffAreas && (
+              <select
+                value={staffMember.area}
+                onChange={(e) => onAreaChange(e.target.value)}
+                aria-label="Active staff area"
+                className="mt-2 max-w-full rounded-lg border border-neutral-700 bg-neutral-900 px-2 py-1 text-[11px] text-neutral-300"
+              >
+                {venueConfig.staffAreas.map((staffArea) => (
+                  <option key={staffArea} value={staffArea}>
+                    Area: {staffArea}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
         </div>
         <button
           onClick={onSignOut}
@@ -607,13 +1010,31 @@ function StaffView({
         </div>
       )}
 
+      {staffMember.role === "🗂️ Administrator" && venueConfig.adminResponsibilities && (
+        <div className="mx-4 mb-3 rounded-xl border border-neutral-800 bg-neutral-950 px-3 py-3">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs font-medium text-neutral-200">Administrator workspace</p>
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            {venueConfig.adminResponsibilities.slice(0, 4).map((responsibility) => (
+              <div key={responsibility.label} className="rounded-lg bg-neutral-900 px-2 py-2">
+                <p className="text-[11px] text-neutral-300">{responsibility.label}</p>
+                <p className="mt-1 text-[10px] leading-tight text-neutral-600">
+                  {responsibility.items.slice(0, 2).join(" · ")}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="flex-1 overflow-y-auto px-4 space-y-3 pb-6">
         {signals.length === 0 && (
           <p className="text-neutral-600 text-sm px-2 pt-8 text-center">
-            No active signals
+            {venueConfig.staffView.emptyLabel}
           </p>
         )}
-        {signals.map((s) => {
+        {orderedSignals.map((s) => {
           const ageSec = Math.floor((Date.now() - s.time) / 1000);
           const stale = ageSec > 30 && !s.ack && !s.claimedBy;
           const critical = ageSec > 90 && !s.ack && !s.claimedBy;
@@ -663,7 +1084,7 @@ function StaffView({
                       onClick={() => onClaim(s.id, staffMember.name)}
                       className="rounded-lg bg-sky-500 text-neutral-900 text-xs font-medium px-3 py-1.5"
                     >
-                      Claim
+                      {venueConfig.staffView.claimLabel}
                     </button>
                   )}
                   {!s.ack && s.claimedBy && isMine && (
@@ -672,7 +1093,7 @@ function StaffView({
                         onClick={() => onAck(s.id)}
                         className="flex items-center gap-1 rounded-lg bg-neutral-100 text-neutral-900 text-xs font-medium px-3 py-1.5"
                       >
-                        <Check size={14} /> Resolved
+                        <Check size={14} /> {venueConfig.staffView.resolveLabel}
                       </button>
                       <button
                         onClick={() => onUnclaim(s.id)}
@@ -792,6 +1213,10 @@ export default function SafeTab() {
     });
   };
 
+  const handleAreaChange = (area) => {
+    setStaffMember((current) => (current ? { ...current, area } : current));
+  };
+
   // Prune acknowledged signals older than 1 hour so storage doesn't grow forever
   useEffect(() => {
     if (!loaded) return;
@@ -806,8 +1231,21 @@ export default function SafeTab() {
 
 
   return (
-    <div className="w-full max-w-sm mx-auto h-[700px] bg-black rounded-3xl border border-neutral-800 flex flex-col overflow-hidden font-sans">
-      <div className="px-5 pt-4 pb-2 flex items-center justify-between gap-2">
+    <div className="relative w-full max-w-sm mx-auto">
+      <a
+        href="tel:911"
+        aria-label="Call 911 for a serious emergency"
+        className="fixed z-30 bottom-4 right-4 flex items-center gap-2 rounded-xl border border-red-400/40 bg-red-600 px-3 py-2.5 text-white shadow-lg shadow-red-950/40 transition hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-300 sm:absolute sm:left-full sm:right-auto sm:top-24 sm:bottom-auto sm:ml-4 sm:w-36 sm:flex-col sm:items-start sm:gap-1 sm:rounded-2xl sm:px-4 sm:py-3"
+      >
+        <PhoneCall size={18} aria-hidden="true" />
+        <span className="text-sm font-semibold leading-tight">Call 911</span>
+        <span className="hidden text-[11px] leading-tight text-red-100 sm:block">
+          Serious emergency
+        </span>
+      </a>
+
+      <div className="h-[700px] bg-black rounded-3xl border border-neutral-800 flex flex-col overflow-hidden font-sans">
+        <div className="px-5 pt-4 pb-2 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-md bg-amber-500 flex items-center justify-center">
             <span className="text-neutral-900 text-xs font-bold">S</span>
@@ -829,8 +1267,8 @@ export default function SafeTab() {
             </option>
           ))}
         </select>
-      </div>
-      <div className="flex border-b border-neutral-800">
+        </div>
+        <div className="flex border-b border-neutral-800">
         <button
           onClick={() => setView("patron")}
           className={`flex-1 py-3 text-sm font-medium ${
@@ -849,28 +1287,31 @@ export default function SafeTab() {
               : "text-neutral-600"
           }`}
         >
-          Staff
+          {venueConfig.staffView.tabLabel}
           {signals.some((s) => !s.ack) && (
             <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
           )}
         </button>
-      </div>
-      <div className="flex-1 overflow-hidden">
-        {view === "patron" ? (
-          <PatronView onSend={handleSend} venueConfig={venueConfig} />
-        ) : staffMember ? (
-          <StaffView
-            signals={signals}
-            onAck={handleAck}
-            onClaim={handleClaim}
-            onUnclaim={handleUnclaim}
-            staffMember={staffMember}
-            onSignOut={() => setStaffMember(null)}
-            soundReady={!!staffMember}
-          />
-        ) : (
-          <StaffLogin onAuth={setStaffMember} />
-        )}
+        </div>
+        <div className="flex-1 overflow-hidden">
+          {view === "patron" ? (
+            <PatronView onSend={handleSend} venueConfig={venueConfig} />
+          ) : staffMember ? (
+            <StaffView
+              signals={signals}
+              onAck={handleAck}
+              onClaim={handleClaim}
+              onUnclaim={handleUnclaim}
+              staffMember={staffMember}
+              onSignOut={() => setStaffMember(null)}
+              soundReady={!!staffMember}
+              venueConfig={venueConfig}
+              onAreaChange={handleAreaChange}
+            />
+          ) : (
+            <StaffLogin onAuth={setStaffMember} venueConfig={venueConfig} />
+          )}
+        </div>
       </div>
     </div>
   );
