@@ -569,7 +569,11 @@ function LocationPicker({ value, onChange, venueConfig }) {
 // Patron view
 // ---------------------------------------------
 function PatronView({ onSend, venueConfig }) {
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState(() => {
+    if (typeof window === "undefined") return "";
+    const params = new URLSearchParams(window.location.search);
+    return params.get("business") || "";
+  });
   const [reason, setReason] = useState(venueConfig.reasons[0]);
   const [sent, setSent] = useState(false);
   const [holding, setHolding] = useState(false);
