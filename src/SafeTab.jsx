@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { MapPin, Bell, Check, X, ChevronDown, Radio, PhoneCall } from "lucide-react";
 import { ref, onValue, set } from "firebase/database";
 import { db } from "./firebase";
+import LandingPage from "./LandingPage";
 
 // ---------------------------------------------
 // Venue-type config — swaps location presets, reason
@@ -1122,12 +1123,17 @@ function StaffView({
 // Root
 // ---------------------------------------------
 export default function SafeTab() {
-  // Staff vs patron is determined by URL path, not a tab.
-  // Patrons go straight to the signal screen (via QR or root URL).
-  // Staff use /staff (bookmarked during venue onboarding) + PIN.
-  const [isStaffPath] = useState(() =>
-    typeof window !== "undefined" && window.location.pathname.startsWith("/staff")
-  );
+  // Route is determined by URL path:
+  // / -> marketing landing page + business directory
+  // /app -> patron signal screen (QR codes point here)
+  // /staff -> staff view (bookmarked during venue onboarding) + PIN
+  const [route] = useState(() => {
+    if (typeof window === "undefined") return "landing";
+    const path = window.location.pathname;
+    if (path.startsWith("/staff")) return "staff";
+    if (path.startsWith("/app")) return "patron";
+    return "landing";
+  });
   const [signals, setSignals] = useState([]);
   const [, forceTick] = useState(0);
   const [staffMember, setStaffMember] = useState(null);
@@ -1235,6 +1241,11 @@ export default function SafeTab() {
   }, [loaded]);
 
 
+  // Landing page renders full-bleed, outside the app shell
+  if (route === "landing") {
+    return <LandingPage />;
+  }
+
   return (
     <div className="relative w-full max-w-sm mx-auto md:max-w-4xl md:px-4">
       <a
@@ -1275,7 +1286,7 @@ export default function SafeTab() {
         </div>
 
         <div className="flex-1 overflow-hidden">
-          {!isStaffPath ? (
+          {route === "patron" ? (
             <PatronView onSend={handleSend} venueConfig={venueConfig} />
           ) : staffMember ? (
             <StaffView
