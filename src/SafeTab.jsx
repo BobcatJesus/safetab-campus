@@ -1142,8 +1142,24 @@ export default function SafeTab() {
   const [, forceTick] = useState(0);
   const [staffMember, setStaffMember] = useState(null);
   const [loaded, setLoaded] = useState(false);
-  const [venueType, setVenueType] = useState(DEFAULT_VENUE_TYPE);
-  const venueConfig = VENUE_TYPES[venueType];
+  const [venueType, setVenueType] = useState(() => {
+    if (typeof window === "undefined") return DEFAULT_VENUE_TYPE;
+    const params = new URLSearchParams(window.location.search);
+    // ?campus=uh or ?campus=rice preselects the campus venue type
+    if (params.get("campus")) return "campus";
+    return DEFAULT_VENUE_TYPE;
+  });
+  const [campusName, setCampusName] = useState(() => {
+    if (typeof window === "undefined") return null;
+    const params = new URLSearchParams(window.location.search);
+    const c = params.get("campus");
+    if (c === "rice") return "Rice University";
+    if (c === "uh") return "University of Houston";
+    return null;
+  });
+  const venueConfig = venueType === "campus" && campusName
+    ? { ...VENUE_TYPES[venueType], label: campusName }
+    : VENUE_TYPES[venueType];
   const SIGNALS_PATH = "signals";
 
   // Signals now live in Firebase Realtime Database instead of localStorage,

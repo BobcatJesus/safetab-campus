@@ -46,6 +46,7 @@ export default function LandingPage() {
   const [accuracy, setAccuracy] = useState(null);
   const [locError, setLocError] = useState(false);
   const [locating, setLocating] = useState(false);
+  const [showCampusPicker, setShowCampusPicker] = useState(false);
 
   const requestLocation = () => {
     if (!navigator.geolocation) {
@@ -135,12 +136,12 @@ export default function LandingPage() {
             Help people request assistance immediately and route them to the
             right campus staff without confusion or delay.
           </p>
-          <a
-            href="/app"
-            className="inline-block w-full md:w-auto text-center bg-emerald-700 hover:bg-emerald-600 text-white font-semibold rounded-2xl px-10 py-4 transition"
+          <button
+            onClick={() => setShowCampusPicker(true)}
+            className="w-full md:w-auto text-center bg-emerald-700 hover:bg-emerald-600 text-white font-semibold rounded-2xl px-10 py-4 transition"
           >
             Enter campus safety
-          </a>
+          </button>
         </div>
       </div>
 
@@ -265,6 +266,44 @@ export default function LandingPage() {
           OWN A BUSINESS? REGISTER IT HERE
         </button>
       </div>
+
+      {/* Campus picker modal */}
+      {showCampusPicker && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6"
+          onClick={() => setShowCampusPicker(false)}
+        >
+          <div
+            className="bg-white rounded-3xl p-8 w-full max-w-sm"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-xl font-bold mb-2">Select your campus</h3>
+            <p className="text-sm text-neutral-500 mb-6">
+              Choose your university to connect with the right safety team.
+            </p>
+            <div className="flex flex-col gap-3">
+              <a
+                href="/app?campus=uh"
+                className="w-full text-center bg-emerald-700 hover:bg-emerald-600 text-white font-semibold rounded-2xl px-6 py-4 transition"
+              >
+                University of Houston
+              </a>
+              <a
+                href="/app?campus=rice"
+                className="w-full text-center bg-emerald-700 hover:bg-emerald-600 text-white font-semibold rounded-2xl px-6 py-4 transition"
+              >
+                Rice University
+              </a>
+              <button
+                onClick={() => setShowCampusPicker(false)}
+                className="text-sm text-neutral-500 hover:text-neutral-700 mt-2"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <div className="border-t border-neutral-200 bg-white">
