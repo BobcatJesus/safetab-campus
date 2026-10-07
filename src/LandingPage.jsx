@@ -86,7 +86,23 @@ export default function LandingPage() {
     <div className="min-h-screen bg-neutral-50 text-neutral-900 font-sans">
       {/* Hero */}
       <div className="relative overflow-hidden bg-white border-b border-neutral-200">
-        <div className="max-w-4xl mx-auto px-6 py-16 md:py-24 text-center">
+        {/* Decorative avatars */}
+        <img
+          src="https://i.pravatar.cc/200?img=11"
+          alt=""
+          className="absolute left-[-30px] md:left-[5%] top-16 w-24 h-24 md:w-36 md:h-36 rounded-full object-cover border-4 border-white shadow-lg opacity-90"
+        />
+        <img
+          src="https://i.pravatar.cc/200?img=32"
+          alt=""
+          className="absolute right-[-20px] md:right-[8%] top-10 w-20 h-20 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-lg opacity-90"
+        />
+        <img
+          src="https://i.pravatar.cc/200?img=48"
+          alt=""
+          className="absolute right-[10%] md:right-[20%] bottom-8 w-16 h-16 md:w-24 md:h-24 rounded-full object-cover border-4 border-white shadow-lg opacity-80 hidden sm:block"
+        />
+        <div className="relative max-w-4xl mx-auto px-6 py-16 md:py-24 text-center">
           <p className="text-xs tracking-[0.3em] text-neutral-500 mb-4">
             SAFETAB &middot; SAFETY SUPPORT
           </p>
