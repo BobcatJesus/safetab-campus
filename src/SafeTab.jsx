@@ -23,7 +23,7 @@ import {
   Download,
 } from "lucide-react";
 import { ref, onValue, set, update, runTransaction } from "firebase/database";
-import { db } from "./firebase";
+import { db, authReady } from "./firebase";
 import { searchPlaces, fetchNearbyPlaces } from "./osm";
 
 // ---------------------------------------------
@@ -3401,7 +3401,8 @@ export default function SafeTab() {
 
   const bootstrapAdministrator = async ({ name, pin }) => {
     if (!businessId || !name || pin.length !== 4) return null;
-    const account = { name, pin, createdAt: Date.now() };
+    const user = await authReady;
+    const account = { name, pin, createdAt: Date.now(), ownerUid: user?.uid || null };
     try {
       const result = await runTransaction(
         ref(db, `businesses/${businessId}/staffSetup/administratorAccount`),
