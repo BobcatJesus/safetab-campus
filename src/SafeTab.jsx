@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import {
   MapPin,
   Bell,
@@ -27,7 +27,7 @@ import { db } from "./firebase";
 import { searchPlaces, fetchNearbyPlaces } from "./osm";
 
 // ---------------------------------------------
-// Distance between two GPS points, in miles — used both to verify a
+// Distance between two GPS points, in miles â€” used both to verify a
 // patron is actually at the business they picked, and to sort the
 // business directory by "nearest to me" so patrons can find the right
 // business without needing a QR code posted at every table.
@@ -65,7 +65,7 @@ function slugifyBusinessId(name) {
 }
 
 // ---------------------------------------------
-// Venue-type config — swaps location presets, reason
+// Venue-type config â€” swaps location presets, reason
 // categories, and terminology per deployment context.
 // Add a new venue type here and the whole app (patron
 // picker, staff labels) adapts without touching component code.
@@ -286,14 +286,14 @@ const VENUE_TYPES = {
     label: "University of Houston",
     staffTerm: "campus safety",
     staffRoles: [
-      "👨‍🎓 Student",
-      "🏠 Resident Assistant (RA)",
-      "🎓 Teaching Assistant (TA)",
-      "👮 Campus Security",
-      "💼 Student Employee",
-      "👩‍🏫 Faculty & Staff",
-      "👨‍👩‍👧 Family Member",
-      "🗂️ Administrator",
+      "ðŸ‘¨â€ðŸŽ“ Student",
+      "ðŸ  Resident Assistant (RA)",
+      "ðŸŽ“ Teaching Assistant (TA)",
+      "ðŸ‘® Campus Security",
+      "ðŸ’¼ Student Employee",
+      "ðŸ‘©â€ðŸ« Faculty & Staff",
+      "ðŸ‘¨â€ðŸ‘©â€ðŸ‘§ Family Member",
+      "ðŸ—‚ï¸ Administrator",
     ],
     staffAreas: [
       "All campus",
@@ -601,7 +601,7 @@ const VENUE_TYPES = {
   },
 
   cafe: {
-    label: "Coffee Shop / Café",
+    label: "Coffee Shop / CafÃ©",
     staffTerm: "staff",
     staffRoles: ["Staff", "Manager"],
     staffAreas: ["All areas", "Seating", "Counter", "Facilities", "Entry"],
@@ -1050,7 +1050,7 @@ const CAMPUS_OPTIONS = [
 ];
 
 // ---------------------------------------------
-// Business finder — patrons get their device location once, we sort
+// Business finder â€” patrons get their device location once, we sort
 // registered and nearby OSM businesses by distance, providing a rich
 // marketplace of proximity options.
 // ---------------------------------------------
@@ -1242,7 +1242,7 @@ function VenueFinder({ businesses, onSelect, onRegister }) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            GPS active · Sorted by live distance ({Math.round(locationAccuracy)} m accuracy)
+            GPS active Â· Sorted by live distance ({Math.round(locationAccuracy)} m accuracy)
           </span>
         )}
         {geoStatus === "checking" && (
@@ -1252,12 +1252,12 @@ function VenueFinder({ businesses, onSelect, onRegister }) {
         )}
         {geoStatus === "denied" && (
           <span className="text-black/50">
-            Location access off · Enable precise location for proximity sorting
+            Location access off Â· Enable precise location for proximity sorting
           </span>
         )}
         {geoStatus === "imprecise" && (
           <span className="text-amber-800">
-            Location accuracy is about {Math.round(locationAccuracy)} m · turn on Precise Location
+            Location accuracy is about {Math.round(locationAccuracy)} m Â· turn on Precise Location
           </span>
         )}
         {loadingOsm && (
@@ -1269,7 +1269,7 @@ function VenueFinder({ businesses, onSelect, onRegister }) {
           onClick={acquireLocation}
           className="ml-auto text-[11px] font-semibold text-amber-900 hover:text-black hover:underline cursor-pointer"
         >
-          {geoStatus === "denied" ? "📍 Enable Location" : "🔄 Refresh GPS"}
+          {geoStatus === "denied" ? "ðŸ“ Enable Location" : "ðŸ”„ Refresh GPS"}
         </button>
       </div>
 
@@ -1278,7 +1278,7 @@ function VenueFinder({ businesses, onSelect, onRegister }) {
         <div className="mt-3.5 rounded-2xl border-2 border-amber-500/50 bg-gradient-to-r from-amber-500/15 via-amber-400/10 to-white p-3.5 shadow-sm">
           <div className="flex items-center justify-between gap-2">
             <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/25 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-amber-950">
-              📍 GPS Proximity Match
+              ðŸ“ GPS Proximity Match
             </span>
             <span className="text-[11px] font-bold text-amber-950">
               {formatDistance(closestBusiness.distance)}
@@ -1290,14 +1290,14 @@ function VenueFinder({ businesses, onSelect, onRegister }) {
                 {closestBusiness.name}
               </h3>
               <p className="text-xs text-black/70 mt-0.5">
-                {VENUE_TYPES[closestBusiness.venueType]?.label || closestBusiness.venueType} · {closestBusiness.address}
+                {VENUE_TYPES[closestBusiness.venueType]?.label || closestBusiness.venueType} Â· {closestBusiness.address}
               </p>
             </div>
             <button
               onClick={() => onSelect(closestBusiness)}
               className="shrink-0 rounded-xl bg-[#0f172a] px-4 py-2.5 text-xs font-extrabold text-[#ffd44f] transition hover:bg-[#1e293b]"
             >
-              Enter {closestBusiness.name} →
+              Enter {closestBusiness.name} â†’
             </button>
           </div>
         </div>
@@ -1382,7 +1382,7 @@ function VenueFinder({ businesses, onSelect, onRegister }) {
 }
 
 // ---------------------------------------------
-// Business registration — a manager searches OpenStreetMap for their
+// Business registration â€” a manager searches OpenStreetMap for their
 // business (or drops a GPS pin / types the address) once, and every
 // patron afterward finds them automatically via VenueFinder above.
 // ---------------------------------------------
@@ -1413,9 +1413,9 @@ function BusinessOnboarding({ onCreate, onCancel }) {
       }
       const found = await searchPlaces(name, coords || {});
       setResults(found);
-      if (found.length === 0) setSearchError("No matches found on OpenStreetMap — enter the address manually below.");
+      if (found.length === 0) setSearchError("No matches found on OpenStreetMap â€” enter the address manually below.");
     } catch {
-      setSearchError("Search failed — enter the address manually below.");
+      setSearchError("Search failed â€” enter the address manually below.");
     } finally {
       setSearching(false);
     }
@@ -1436,7 +1436,7 @@ function BusinessOnboarding({ onCreate, onCancel }) {
           source: "gps",
         });
       },
-      () => setSearchError("Couldn't get your location — check location permissions"),
+      () => setSearchError("Couldn't get your location â€” check location permissions"),
       { enableHighAccuracy: true, timeout: 10000 }
     );
   };
@@ -1457,7 +1457,7 @@ function BusinessOnboarding({ onCreate, onCancel }) {
     <div className="mt-10 w-full max-w-xl rounded-3xl border border-black/15 bg-white/95 p-5 text-left shadow-xl">
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/60">Register your business</p>
       <p className="mt-1 text-[11px] text-black/50">
-        This makes you findable to patrons by name and distance — no per-table QR codes needed.
+        This makes you findable to patrons by name and distance â€” no per-table QR codes needed.
       </p>
 
       <label className="mt-4 block text-[11px] font-medium text-black/60">
@@ -1529,7 +1529,7 @@ function BusinessOnboarding({ onCreate, onCancel }) {
 
       {picked && (
         <p className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-[11px] text-emerald-700">
-          Selected: {picked.name} — {picked.address}
+          Selected: {picked.name} â€” {picked.address}
         </p>
       )}
 
@@ -1581,7 +1581,7 @@ function CampusLanding({ businesses, onEnter }) {
 
       <div className="relative z-20 mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center px-6 py-16 text-center">
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.35em] text-black/70">
-          SafeTab · safety support
+          SafeTab Â· safety support
         </p>
         <h1
           className="text-5xl font-black uppercase leading-[0.92] sm:text-7xl"
@@ -1675,12 +1675,12 @@ function CampusLanding({ businesses, onEnter }) {
 
             <button
               type="button"
-              onClick={() => onEnter({ demoVenue: "campus", location: "Student Center South · Main Lounge" })}
+              onClick={() => onEnter({ demoVenue: "campus", location: "Student Center South Â· Main Lounge" })}
               className="mt-4 flex w-full items-center justify-between rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-left transition hover:bg-amber-500/20"
             >
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-800">
-                  ⚡ 1-Click Client Demo Mode
+                  âš¡ 1-Click Client Demo Mode
                 </p>
                 <p className="text-xs font-semibold text-neutral-900 mt-0.5">
                   Launch pre-configured UH campus safety session
@@ -1705,9 +1705,9 @@ function CampusLanding({ businesses, onEnter }) {
                   How it works
                 </p>
                 <ul className="mt-2 space-y-1.5 leading-6 text-black/75">
-                  <li>• Select your campus</li>
-                  <li>• Choose the reason for support</li>
-                  <li>• Alert campus staff in real time</li>
+                  <li>â€¢ Select your campus</li>
+                  <li>â€¢ Choose the reason for support</li>
+                  <li>â€¢ Alert campus staff in real time</li>
                 </ul>
               </div>
             </div>
@@ -1949,8 +1949,8 @@ function PatronView({ onSend, onCampusChange, venueConfig, initialLocation, busi
       const withinRange = distance <= 0.35;
       setGpsStatus(withinRange ? "verified" : "outside");
       setGpsMessage(withinRange
-        ? "✓ GPS Verified at venue"
-        : `📍 Selected via proximity (${formatDistance(distance)})`);
+        ? "âœ“ GPS Verified at venue"
+        : `ðŸ“ Selected via proximity (${formatDistance(distance)})`);
     };
 
     navigator.geolocation.getCurrentPosition(
@@ -2166,7 +2166,7 @@ function PatronView({ onSend, onCampusChange, venueConfig, initialLocation, busi
 }
 
 // ---------------------------------------------
-// Staff auth — simple name + PIN gate (no backend yet;
+// Staff auth â€” simple name + PIN gate (no backend yet;
 // swap MOCK_STAFF for a real roster lookup later)
 // ---------------------------------------------
 const MOCK_STAFF = [
@@ -2209,7 +2209,7 @@ function StaffLogin({ onAuth, onBootstrapAdmin, administratorAccount, staffSetup
     }
     if (match) {
       setError("");
-      // this click is a user gesture — use it to unlock audio playback
+      // this click is a user gesture â€” use it to unlock audio playback
       try {
         getAudioCtx();
       } catch {
@@ -2283,7 +2283,7 @@ function StaffLogin({ onAuth, onBootstrapAdmin, administratorAccount, staffSetup
           ))}
         </select>
       )}
-      {signInMode === "staff" && ["🗂️ Administrator", "Manager"].includes(role) && venueConfig.adminResponsibilities && (
+      {signInMode === "staff" && ["ðŸ—‚ï¸ Administrator", "Manager"].includes(role) && venueConfig.adminResponsibilities && (
         <div className="max-h-32 overflow-y-auto rounded-xl border border-neutral-800 bg-neutral-950 px-3 py-2 text-[11px] text-neutral-400">
           <p className="mb-2 text-neutral-200">
             {role === "Manager" ? "Manager scope" : "Administrator scope"}
@@ -2438,7 +2438,7 @@ function AdminView({
   onSaveSettings,
   allowBusinessClaim = true,
 }) {
-  const isAdministrator = ["🗂️ Administrator", "Administrator"].includes(staffMember.role);
+  const isAdministrator = ["ðŸ—‚ï¸ Administrator", "Administrator"].includes(staffMember.role);
   const hasBusinessCoordinates = businessLocation?.lat != null && businessLocation?.lng != null;
   const [claimMode, setClaimMode] = useState(businessLocation?.source === "manual" ? "manual" : "gps");
   const [businessName, setBusinessName] = useState(businessLocation?.businessName || "");
@@ -2475,7 +2475,7 @@ function AdminView({
               {businessLocation ? (
                 <p className="mt-1 text-[11px] text-neutral-400">
                   {businessLocation.source === "manual"
-                    ? `${businessLocation.businessName} · ${businessLocation.address}`
+                    ? `${businessLocation.businessName} Â· ${businessLocation.address}`
                     : hasBusinessCoordinates
                       ? `GPS location selected at ${businessLocation.lat.toFixed(5)}, ${businessLocation.lng.toFixed(5)}`
                       : "Business location has not been verified yet."}
@@ -2580,7 +2580,7 @@ function AdminView({
 }
 
 // ---------------------------------------------
-// Alert engine — synthesized chime (no external audio
+// Alert engine â€” synthesized chime (no external audio
 // file needed) + vibration. Browsers require a user
 // gesture before audio can play, so audioCtx is created
 // lazily on the staff sign-in tap.
@@ -2667,7 +2667,7 @@ function StaffView({
   }, [signals]);
 
   // Escalation: re-chime every 30s only while a signal is BOTH unclaimed
-  // and unacknowledged. Once someone claims it, escalation stops — the
+  // and unacknowledged. Once someone claims it, escalation stops â€” the
   // point of re-alerting is to catch signals nobody has picked up yet.
   useEffect(() => {
     const t = setInterval(() => {
@@ -2719,7 +2719,7 @@ function StaffView({
             </div>
           </div>
           <button onClick={onSignOut} className="text-neutral-600 text-xs underline">
-            {staffMember.name} · Sign out
+            {staffMember.name} Â· Sign out
           </button>
         </div>
         <div className="grid grid-cols-2 gap-1 border-b border-neutral-800 bg-neutral-950 p-1">
@@ -2727,7 +2727,7 @@ function StaffView({
             Live queue
           </button>
           <button className="rounded-md bg-amber-500 px-3 py-2 text-xs font-medium text-neutral-900 shadow-sm shadow-amber-600/20">
-            Records · {records.length}
+            Records Â· {records.length}
           </button>
         </div>
         <RecordsView records={records} onSaveMemo={onSaveMemo} onSeedDemoRecords={onSeedDemoRecords} />
@@ -2745,8 +2745,8 @@ function StaffView({
               {venueConfig.staffView.title}
             </p>
             <p className="text-neutral-500 text-xs mt-0.5">
-              {staffMember.role && `${staffMember.role} · `}
-              {unclaimedCount} awaiting response · {signals.filter((s) => !s.ack).length} active
+              {staffMember.role && `${staffMember.role} Â· `}
+              {unclaimedCount} awaiting response Â· {signals.filter((s) => !s.ack).length} active
             </p>
             {venueConfig.staffAreas && (
               <select
@@ -2768,27 +2768,27 @@ function StaffView({
           onClick={onSignOut}
           className="text-neutral-600 text-xs underline"
         >
-          {staffMember.name} · Sign out
+          {staffMember.name} Â· Sign out
         </button>
       </div>
 
       {!soundReady && (
         <div className="mx-4 mb-2 rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs text-red-300">
-          Sound may not fire until you interact with the screen once — tap
+          Sound may not fire until you interact with the screen once â€” tap
           anywhere to arm alerts.
         </div>
       )}
       <div className="mx-4 mb-3 grid grid-cols-2 gap-1 rounded-lg bg-neutral-950 p-1">
         <button className="rounded-md bg-amber-500 px-3 py-2 text-xs font-medium text-neutral-900 shadow-sm shadow-amber-600/20">
-          Live queue · {unclaimedCount}
+          Live queue Â· {unclaimedCount}
         </button>
         <button onClick={() => setStaffPanel("records")} className="rounded-md px-3 py-2 text-xs font-medium text-neutral-400 hover:bg-neutral-800 hover:text-neutral-200">
-          Records · {records.length}
+          Records Â· {records.length}
         </button>
       </div>
       {alertStatus && !alertStatus.audioOk && (
         <div className="mx-4 mb-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
-          Audio failed to play — check device volume/silent mode. Vibration{" "}
+          Audio failed to play â€” check device volume/silent mode. Vibration{" "}
           {alertStatus.vibrateOk ? "did" : "also did not"} fire.
         </div>
       )}
@@ -2848,11 +2848,11 @@ function StaffView({
                     className={`text-xs mt-1 ${critical ? "text-red-400 font-medium" : "text-neutral-600"}`}
                   >
                     {ageSec}s ago
-                    {critical ? " · unclaimed, re-alerting" : ""}
+                    {critical ? " Â· unclaimed, re-alerting" : ""}
                   </p>
                   {s.claimedBy && !s.ack && (
                     <p className="text-sky-400 text-xs mt-1 font-medium">
-                      {s.claimedBy} responding · {claimedAgeSec}s
+                      {s.claimedBy} responding Â· {claimedAgeSec}s
                     </p>
                   )}
                 </div>
@@ -2900,7 +2900,7 @@ function StaffView({
 const SAMPLE_DEMO_RECORDS = [
   {
     id: "record-demo-1",
-    location: "Student Center South · Main Lounge",
+    location: "Student Center South Â· Main Lounge",
     reason: "Noise & Conduct Concerns",
     message: "Group playing loud music late near quiet study tables",
     closedBy: "Jordan (Campus Safety)",
@@ -2910,7 +2910,7 @@ const SAMPLE_DEMO_RECORDS = [
   },
   {
     id: "record-demo-2",
-    location: "MD Anderson Library · 3rd Floor",
+    location: "MD Anderson Library Â· 3rd Floor",
     reason: "Safety & Security Check",
     message: "Unattended laptop and backpack at desk for over an hour",
     closedBy: "Priya (RA)",
@@ -2920,7 +2920,7 @@ const SAMPLE_DEMO_RECORDS = [
   },
   {
     id: "record-demo-3",
-    location: "Cougar Village · Residence Entrance",
+    location: "Cougar Village Â· Residence Entrance",
     reason: "Safety Escort Request",
     message: "Finished late lab session, requested escort to Lot 4A",
     closedBy: "Marcus (Campus Security)",
@@ -3042,7 +3042,7 @@ function RecordsView({ records, onSaveMemo, onSeedDemoRecords }) {
                 </p>
                 <p className="mt-1 text-xs font-medium text-amber-300/90">{record.reason}</p>
                 <p className="mt-1 text-[11px] text-neutral-500">
-                  Closed by <span className="text-neutral-300 font-medium">{record.closedBy || "staff"}</span> ·{" "}
+                  Closed by <span className="text-neutral-300 font-medium">{record.closedBy || "staff"}</span> Â·{" "}
                   {new Date(record.closedAt || record.time || Date.now()).toLocaleString()}
                 </p>
               </div>
@@ -3111,14 +3111,14 @@ export default function SafeTab() {
   const [staffMember, setStaffMember] = useState(null);
   const [loaded, setLoaded] = useState(false);
   // businessId identifies which specific business a patron/staff member is
-  // interacting with — this is what lets many businesses share one app
+  // interacting with â€” this is what lets many businesses share one app
   // deployment instead of each needing their own QR codes/instances.
   const [businessId, setBusinessId] = useState(null);
   const [venueType, setVenueType] = useState(DEFAULT_VENUE_TYPE);
   const [businesses, setBusinesses] = useState({});
   const [registrationNotice, setRegistrationNotice] = useState("");
   const [locationError, setLocationError] = useState("");
-  const [staffRoster, setStaffRoster] = useState(MOCK_STAFF);
+  const [staffRoster, setStaffRoster] = useState([]);
   const [administratorAccount, setAdministratorAccount] = useState(null);
   const [staffSetupLoaded, setStaffSetupLoaded] = useState(false);
   const [dispatchSettings, setDispatchSettings] = useState({
@@ -3126,7 +3126,7 @@ export default function SafeTab() {
     repeatSeconds: 30,
   });
   const venueConfig = VENUE_TYPES[venueType];
-  const canManageVenue = staffMember && ["🗂️ Administrator", "Administrator", "Manager"].includes(staffMember.role);
+  const canManageVenue = staffMember && ["ðŸ—‚ï¸ Administrator", "Administrator", "Manager"].includes(staffMember.role);
   const businessLocation = businessId
     ? businesses[businessId] || CAMPUS_OPTIONS.find((campus) => campus.id === businessId) || null
     : null;
@@ -3140,7 +3140,7 @@ export default function SafeTab() {
   const persist = (next) => {
     if (!SIGNALS_PATH) return;
     set(ref(db, SIGNALS_PATH), next).catch(() => {
-      // write failed (offline, bad config, etc.) — local state still
+      // write failed (offline, bad config, etc.) â€” local state still
       // holds the value for this session, but it won't reach other devices
     });
   };
@@ -3171,7 +3171,7 @@ export default function SafeTab() {
         setLoaded(true);
       },
       () => {
-        // read failed — likely bad/missing Firebase config
+        // read failed â€” likely bad/missing Firebase config
         setLoaded(true);
       }
     );
@@ -3195,12 +3195,12 @@ export default function SafeTab() {
     if (!businessId) return;
     setStaffSetupLoaded(false);
     setAdministratorAccount(null);
-    setStaffRoster(MOCK_STAFF);
+    setStaffRoster([]);
     const setupRef = ref(db, `businesses/${businessId}/staffSetup`);
     const unsubscribe = onValue(setupRef, (snapshot) => {
       const setup = snapshot.val();
       if (setup?.roster) setStaffRoster(Array.isArray(setup.roster) ? setup.roster : Object.values(setup.roster));
-      else setStaffRoster(MOCK_STAFF);
+      else setStaffRoster([]);
       setAdministratorAccount(setup?.administratorAccount || null);
       setStaffSetupLoaded(true);
       if (setup?.dispatchSettings) {
@@ -3294,7 +3294,7 @@ export default function SafeTab() {
     setStaffMember((current) => (current ? { ...current, area } : current));
   };
 
-  // Manager taps "Claim this location" — captures the device's current GPS
+  // Manager taps "Claim this location" â€” captures the device's current GPS
   // coordinates as this business's authoritative location, merged onto its
   // existing directory record (so its name/venue type aren't overwritten).
   const handleClaimLocation = ({ mode = "gps", businessName = "", address = "", onSuccess } = {}) => {
@@ -3339,11 +3339,11 @@ export default function SafeTab() {
         setBusinesses((current) => ({ ...current, [businessId]: { ...current[businessId], ...claimed } }));
         onSuccess?.();
         update(ref(db, `businesses/${businessId}`), claimed).catch(() => {
-          // write failed (offline, bad config, etc.) — local state still holds it
+          // write failed (offline, bad config, etc.) â€” local state still holds it
         });
       },
       () => {
-        setLocationError("Couldn't get your location — check location permissions");
+        setLocationError("Couldn't get your location â€” check location permissions");
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
